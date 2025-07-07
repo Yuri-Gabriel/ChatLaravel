@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Dto;
+
+use App\Models\Usuario;
+use Illuminate\Http\Request;
+
+class UsuarioDTO {
+    public string $nome_usuario;
+
+    public function __construct(string $nome_usuario) {
+        $this->nome_usuario = $nome_usuario;
+    }
+
+    public static function fromModel(Usuario $user): self {
+        return new self($user->nome_usuario);
+    }
+    public static function fromRequest(Request $request): self {
+        return new self($request->input('nome_usuario'));
+    }
+}
