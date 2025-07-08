@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Dto\MensagemDTO;
+use App\Events\MensagemEvent;
 use App\Http\Service\MensagemService;
 use App\Models\Mensagem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MensagemController extends Controller {
-    public function saveMessage(Request $request): JsonResponse {
+    public function saveMessage(Request $request, string $grupo): JsonResponse {
         $mensagemDto = MensagemDTO::fromRequest($request);
 
         $saved = MensagemService::save(
@@ -17,6 +18,7 @@ class MensagemController extends Controller {
         );
 
         if (!$saved) {
+            broadcast(new MensagemEvent($mensagemDto, $grupo))->toOthers();
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao salvar a mensagem'

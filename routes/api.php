@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/createUser', [UsuarioController::class, 'createUser']);
 Route::post('/createGroup', [GrupoController::class, 'createGroup']);
-Route::post('/saveMessage', [MensagemController::class, 'saveMessage']);
+Route::post('/saveMessage/{grupo}', [MensagemController::class, 'saveMessage']);
