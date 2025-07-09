@@ -18,7 +18,7 @@ class MensagemController extends Controller {
         );
 
         if (!$saved) {
-            broadcast(new MensagemEvent($mensagemDto, $grupo))->toOthers();
+            //broadcast(new MensagemEvent($mensagemDto, $grupo))->toOthers();
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao salvar a mensagem'

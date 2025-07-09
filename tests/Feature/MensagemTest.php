@@ -86,5 +86,7 @@ class MensagemTest extends TestCase {
         ]);
 
         $response->assertStatus(JsonResponse::HTTP_CREATED);
+
+        $response->dump();
     }
 }
