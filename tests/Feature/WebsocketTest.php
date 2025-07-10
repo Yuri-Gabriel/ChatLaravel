@@ -9,6 +9,7 @@ use Database\Factories\GrupoDtoFactory;
 use Database\Factories\MensagemDtoFactory;
 use Database\Factories\UsuarioDtoFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -40,6 +41,10 @@ class WebsocketTest extends TestCase
             (array) $dto
         );
 
-        Event::assertDispatched(MensagemEvent::class);
+        Event::assertDispatched(
+            MensagemEvent::class,
+            function ($event) use ($dto, $grupo): bool {
+                return $event->dto->texto_mensagem == $dto->texto_mensagem;
+        });
     }
 }
