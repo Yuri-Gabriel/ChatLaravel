@@ -5,7 +5,7 @@ use App\Models\Grupo;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Broadcast;
 
-Broadcast::channel('chat.{nomeGrupo}', function (Usuario $user, string $nomeGrupo): bool {
+Broadcast::channel("chat.{nomeGrupo}", function (Usuario $user, string $nomeGrupo): bool {
     $grupo = Grupo::where('nome_grupo', $nomeGrupo)->first();
 
     if (!$grupo) return false;

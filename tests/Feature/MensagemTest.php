@@ -11,6 +11,7 @@ use Database\Factories\UsuarioDtoFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class MensagemTest extends TestCase {
@@ -66,6 +67,9 @@ class MensagemTest extends TestCase {
     }
 
     public function test_create_message_by_request(): void {
+
+        Event::fake();
+
         $usuarioDto = UsuarioDtoFactory::make();
         $usuario = Usuario::fromDTO($usuarioDto);
         $usuario->save();
@@ -79,14 +83,12 @@ class MensagemTest extends TestCase {
             'id_grupo' => $grupo->id_grupo
         ]);
 
-        $response = $this->post('/api/saveMessage', [
-            'texto_mensagem' => $dto->texto_mensagem,
-            'id_usuario' => $dto->id_usuario,
-            'id_grupo' => $dto->id_grupo
-        ]);
+        $response = $this->postJson(
+            '/api/saveMessage/' . str_replace(" ", "", $grupo->nome_grupo),
+            (array) $dto
+
+        );
 
         $response->assertStatus(JsonResponse::HTTP_CREATED);
-
-        $response->dump();
     }
 }

@@ -18,7 +18,7 @@ class WebsocketTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function websocket(): void
+    public function test_websocket(): void
     {
         Event::fake();
 
@@ -36,7 +36,7 @@ class WebsocketTest extends TestCase
         ]);
 
         $response = $this->postJson(
-            "/saveMessage/" . $grupo->nome_grupo,
+            "api/saveMessage/" . str_replace(" ", "", $grupo->nome_grupo),
             (array) $dto
         );
 
