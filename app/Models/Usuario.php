@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Dto\UsuarioDTO;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
     protected $fillable = ['nome_usuario'];
     protected $table = "usuario";
