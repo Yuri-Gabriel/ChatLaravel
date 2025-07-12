@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dto\MensagemDTO;
 use App\Events\MensagemEvent;
+use App\Exceptions\MensagemException;
 use App\Http\Service\MensagemService;
 use App\Models\Mensagem;
 use Exception;
@@ -47,6 +48,11 @@ class MensagemController extends Controller {
                 'success' => true,
                 'data' => $messages
             ], JsonResponse::HTTP_OK);
+        } catch (MensagemException $err) {
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage()
+            ], JsonResponse::HTTP_NOT_FOUND);
         } catch (Exception $err) {
             return response()->json([
                 'success' => false,
