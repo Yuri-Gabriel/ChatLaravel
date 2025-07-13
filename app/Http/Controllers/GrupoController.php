@@ -9,10 +9,23 @@ use App\Models\Grupo;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class GrupoController extends Controller {
+
+    // Criar o getAll
     public function createGroup(Request $request): JsonResponse {
         try {
+            $requestIsValid = GrupoDTO::requestIsValid(
+                $request
+            );
+
+            if (!$requestIsValid) return response()->json([
+                'success' => false,
+                'message' => 'Dados inválidos'
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            
+
             $grupoDto = GrupoDTO::fromRequest($request);
 
             $saved = GrupoService::save(

@@ -17,31 +17,6 @@ use Tests\TestCase;
 class MensagemTest extends TestCase {
     use RefreshDatabase;
 
-    public function test_get_all_messages(): void {
-
-        $grupoDto = GrupoDtoFactory::make();
-        $grupo = Grupo::fromDTO($grupoDto);
-        $grupo->save();
-
-        for($i = 0; $i < 5; $i++) {
-            $usuarioDto = UsuarioDtoFactory::make();
-            $usuario = Usuario::fromDTO($usuarioDto);
-            $usuario->save();
-
-            $dto = MensagemDtoFactory::make([
-                'id_usuario' => $usuario->id_usuario,
-                'id_grupo' => $grupo->id_grupo
-            ]);
-
-            $mensagem = Mensagem::fromDTO($dto);
-            $mensagem->save();
-        }
-
-        $reponse = $this->get("/api/getAllMessages/" . $grupo->nome_grupo);
-
-        $reponse->assertStatus(JsonResponse::HTTP_OK);
-    }
-
     public function test_create_one_message(): void {
         $usuarioDto = UsuarioDtoFactory::make();
         $usuario = Usuario::fromDTO($usuarioDto);

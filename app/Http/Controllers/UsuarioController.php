@@ -8,11 +8,21 @@ use App\Models\Usuario;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UsuarioController extends Controller {
 
     public function createUser(Request $request): JsonResponse {
         try {
+            $requestIsValid = UsuarioDTO::requestIsValid(
+                $request
+            );
+
+            if (!$requestIsValid) return response()->json([
+                'success' => false,
+                'message' => 'Dados inválidos'
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+
             $usuarioDTO = UsuarioDTO::fromRequest($request);
 
             $saved = UsuarioService::save(
@@ -25,7 +35,9 @@ class UsuarioController extends Controller {
                     'message' => 'Erro ao salvar usuário'
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
-
+            session([
+                "user_session" => $usuarioDTO->nome_usuario
+            ]);
             return response()->json([
                 'success' => true,
                 'message' => 'Usuário salvo com sucesso'
@@ -37,4 +49,6 @@ class UsuarioController extends Controller {
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }

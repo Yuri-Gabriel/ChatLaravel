@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\Usuario;
 use Database\Factories\UsuarioDtoFactory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
 
 class UsuarioTest extends TestCase {
 
@@ -42,6 +43,4 @@ class UsuarioTest extends TestCase {
 
         $response->assertStatus(JsonResponse::HTTP_CREATED);
     }
-
-
 }

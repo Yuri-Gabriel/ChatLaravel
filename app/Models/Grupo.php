@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Grupo extends Model {
 
-    protected $fillable = ['nome_grupo'];
+    protected $fillable = ['id_grupo', 'nome_grupo'];
     protected $table = "grupo";
     protected $primaryKey = 'id_grupo';
 
