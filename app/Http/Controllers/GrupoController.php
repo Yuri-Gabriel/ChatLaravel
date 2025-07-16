@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Dto\GrupoDTO;
-use App\Exceptions\GrupoException;
 use App\Http\Service\GrupoService;
 use App\Models\Grupo;
 use Exception;
@@ -24,7 +23,7 @@ class GrupoController extends Controller {
                 'success' => false,
                 'message' => 'Dados inválidos'
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-            
+
 
             $grupoDto = GrupoDTO::fromRequest($request);
 
@@ -43,11 +42,6 @@ class GrupoController extends Controller {
                 'success' => true,
                 'message' => 'Grupo criado com sucesso'
             ], JsonResponse::HTTP_CREATED);
-        } catch (GrupoException $err) {
-            return response()->json([
-                'success' => false,
-                'message' => $err->getMessage()
-            ], JsonResponse::HTTP_NOT_ACCEPTABLE);
         } catch (Exception $err) {
             return response()->json([
                 'success' => false,

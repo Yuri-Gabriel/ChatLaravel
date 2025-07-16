@@ -21,10 +21,12 @@ class CheckGroup
         $user_session_exists = session()->exists("user_session");
 
         if(!$user_session_exists) redirect()->route('index-view');
-        
+
         $nome_grupo = $request->route('nome_grupo');
 
-        $validator = Validator::make([$nome_grupo], [
+        $validator = Validator::make([
+            "nome_grupo" => $nome_grupo
+        ], [
             'nome_grupo' => 'required|string'
         ]);
 

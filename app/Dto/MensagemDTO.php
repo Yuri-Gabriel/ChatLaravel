@@ -38,7 +38,7 @@ class MensagemDTO {
             "id_usuario" => $request->input('id_usuario'),
             "id_grupo" => $request->input('id_grupo')
         ], $additional_data == null ? [] : $additional_data);
-        
+
         $rules = array_merge([
             'nome_grupo' => 'required|string',
             'texto_mensagem' => 'required|string',

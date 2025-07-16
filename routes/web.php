@@ -14,9 +14,7 @@ Route::prefix('view')->group(function (): void {
         return view('index');
     })->name('index-view');
 
-    Route::get('/group', function(): View {
-        return view('group');
-    })
+    Route::get('/group', [ViewController::class, 'groupSelectionView'])
     ->name("group-view")
     ->middleware("check-user");
 
@@ -24,8 +22,8 @@ Route::prefix('view')->group(function (): void {
         'chat/{nome_grupo}',
         [ViewController::class, 'accessChat']
     )
-    ->name("chat-view")
-    ->middleware('check-group');
+    ->name("chat-view");
+    //->middleware('check-group');
 });
 
 Route::prefix('api')->group(function (): void {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckGroup;
 use App\Http\Middleware\CheckUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'check-user' => CheckUser::class
+            'check-user' => CheckUser::class,
+            'check-group' => CheckGroup::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

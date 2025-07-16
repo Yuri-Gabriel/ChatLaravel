@@ -1,8 +1,12 @@
 const user = sessionStorage.getItem("user");
 
 if(user != null) {
-    window.location.href = "/chat";
+    window.location.href = "/view/group";
 }
+
+const csrfToken = document
+  .querySelector('meta[name="csrf-token"]')
+  ?.getAttribute('content') ?? '';
 
 const button_start = document.getElementById("button_start");
 
@@ -16,13 +20,14 @@ button_start.addEventListener("click", () => {
         return;
     }
 
-    fetch('/api/saveUser', {
+    fetch('/api/createUser', {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'X-CSRF-TOKEN': csrfToken,
         },
         body: JSON.stringify({
-            username: username
+            nome_usuario: username
         })
     })
     .then(async response => {
@@ -33,8 +38,8 @@ button_start.addEventListener("click", () => {
 		throw new Error(errorJson.message || "Erro desconhecido");
     })
     .then(json => {
-        window.sessionStorage.setItem("user", JSON.stringify(json));
-        window.location.href = "/chat";
+        window.sessionStorage.setItem("user", username);
+        window.location.href = "/view/group";
     })
     .catch(error => {
 		console.log(error.message);
