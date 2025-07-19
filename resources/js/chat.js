@@ -14,21 +14,23 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: true,
+    forceTLS: false,
 });
 
 const url = window.location.href;
 
 const channel = url.substring(url.lastIndexOf('/') + 1);
 console.log(`chat.${channel}`)
-window.Echo.private(`chat.${channel}`)
-    .listen("MensagemEvent", (e) => {
-        console.log("Evento recebido:", e);
+window.Echo.channel(`chat.${channel}`)
+    .subscribed(() => {
+        console.log("✅ Subscrição ao canal bem-sucedida:", `chat.${channel}`);
+    })
+    .error((error) => {
+        console.error("❌ Erro ao se inscrever no canal:", error);
+    })
+    .listen('.MensagemEvent', e => {
+        console.log('MensagemEvent:', e);
     });
-
-window.Echo.connector.pusher.connection.bind('error', function(err) {
-    console.error("Erro no Echo:", err);
-});
 
 document.getElementById("send_message_btn").addEventListener("click", () => {
     const msg = document.getElementById("message_input").value;

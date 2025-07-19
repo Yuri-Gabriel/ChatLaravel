@@ -6,6 +6,9 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\MensagemController;
 use App\Http\Controllers\ViewController;
+use App\Models\Grupo;
+use App\Models\Mensagem;
+use App\Models\Usuario;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -43,5 +46,11 @@ Route::prefix('api')->group(function (): void {
 
 Route::fallback(function (): RedirectResponse {
     return redirect()->route('index-view');
+});
+
+Route::get('/resetDB', function() {
+    Usuario::truncate();
+    Grupo::truncate();
+    Mensagem::truncate();
 });
 
