@@ -16,10 +16,17 @@ class Mensagem extends Model {
     protected $primaryKey = 'id_mensagem';
 
     public static function fromDTO(MensagemDTO $dto): self {
+        $idUsuario = Usuario::where('nome_usuario', $dto->nome_usuario)->value('id_usuario');
+        $idGrupo = Grupo::where('nome_grupo', $dto->nome_grupo)->value('id_grupo');
+
+        if (!$idUsuario || !$idGrupo) {
+            throw new \Exception('Usuário ou grupo não encontrado');
+        }
+
         return new self([
             'texto_mensagem' => $dto->texto_mensagem,
-            'id_usuario' => $dto->id_usuario,
-            'id_grupo' => $dto->id_grupo
+            'id_usuario' => $idUsuario,
+            'id_grupo' => $idGrupo,
         ]);
     }
 

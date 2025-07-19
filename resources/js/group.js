@@ -37,6 +37,7 @@ create_group_btn.addEventListener("click", () => {
         throw new Error(await response.json());
     })
     .then(json => {
+        console.log(json)
         alert(json.message);
         window.location.href = `/view/chat/${nome_grupo}`;
     })

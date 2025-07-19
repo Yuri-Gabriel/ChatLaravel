@@ -27,8 +27,5 @@
 
 	<!-- STOMP.js (versão compatível) -->
 	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@6.1.2/bundles/stomp.umd.min.js"></script>
-
-
-    <script th:src="@{script/chat.js}"></script>
 </body>
 </html>

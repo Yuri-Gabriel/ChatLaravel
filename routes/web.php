@@ -22,8 +22,8 @@ Route::prefix('view')->group(function (): void {
         'chat/{nome_grupo}',
         [ViewController::class, 'accessChat']
     )
-    ->name("chat-view");
-    //->middleware('check-group');
+    ->name("chat-view")
+    ->middleware('check-group');
 });
 
 Route::prefix('api')->group(function (): void {

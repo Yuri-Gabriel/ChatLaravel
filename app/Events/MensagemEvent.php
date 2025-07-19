@@ -8,6 +8,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class MensagemEvent implements ShouldBroadcast
 {
@@ -37,10 +38,17 @@ class MensagemEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
+        Log::debug("Broadcasting para chat.{$this->grupo}", [
+            'texto' => $this->dto->texto_mensagem,
+            'nome_usuario' => $this->dto->nome_usuario,
+            'nome_grupo' => $this->dto->nome_grupo,
+            'data' => now()->toDateTimeString()
+        ]);
+
         return [
             'texto' => $this->dto->texto_mensagem,
-            'id_usuario' => $this->dto->id_usuario,
-            'id_grupo' => $this->dto->id_grupo,
+            'nome_usuario' => $this->dto->nome_usuario,
+            'nome_grupo' => $this->dto->nome_grupo,
             'data' => now()->toDateTimeString()
         ];
     }
