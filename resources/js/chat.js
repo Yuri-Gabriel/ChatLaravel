@@ -6,28 +6,28 @@ const csrfToken = document
   ?.getAttribute('content') ?? '';
 
 import Echo from 'laravel-echo';
-
 import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-    enabledTransports: ['ws', 'wss'],
-
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true,
 });
 
 const url = window.location.href;
 
 const channel = url.substring(url.lastIndexOf('/') + 1);
 console.log(`chat.${channel}`)
-window.Echo.private(`chat.${channel}`).listen(".MensagemEvent", (e) => {
-    console.log(e)
+window.Echo.private(`chat.${channel}`)
+    .listen("MensagemEvent", (e) => {
+        console.log("Evento recebido:", e);
+    });
+
+window.Echo.connector.pusher.connection.bind('error', function(err) {
+    console.error("Erro no Echo:", err);
 });
 
 document.getElementById("send_message_btn").addEventListener("click", () => {
