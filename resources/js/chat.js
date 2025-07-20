@@ -12,31 +12,41 @@ window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: false,
+    key: import.meta.env.VITE_PUSHER_APP_KEY || '85b07856e1d48d85392a', // Fallback explícito
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER || 'sa1', // Fallback explícito
+    forceTLS: true,
+    encrypted: true,
+    disableStats: true,
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        }
+    },
+    authEndpoint: '/broadcasting/auth'
 });
 
 const url = window.location.href;
+const channelName = url.substring(url.lastIndexOf('/') + 1);
 
-const channel = url.substring(url.lastIndexOf('/') + 1);
-console.log(`chat.${channel}`)
-window.Echo.channel(`chat.${channel}`)
+console.log(`Conectando ao canal: chat.${channelName}`);
+
+window.Echo.channel(`chat.${channelName}`)
     .subscribed(() => {
-        console.log("✅ Subscrição ao canal bem-sucedida:", `chat.${channel}`);
+        console.log("✅ Inscrito no canal: chat." + channelName);
     })
     .error((error) => {
-        console.error("❌ Erro ao se inscrever no canal:", error);
+        console.error("❌ Erro na conexão:", error);
     })
-    .listen('.MensagemEvent', e => {
-        console.log('MensagemEvent:', e);
+    .listen('.mensagem.nova', (e) => {
+        console.log('Nova mensagem recebida:', e);
+        // Adicione aqui a lógica para exibir a mensagem na tela
     });
 
 document.getElementById("send_message_btn").addEventListener("click", () => {
     const msg = document.getElementById("message_input").value;
     console.log(msg);
 
-    fetch(`/api/saveMessage/${channel}`, {
+    fetch(`/api/saveMessage/${channelName}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -45,7 +55,7 @@ document.getElementById("send_message_btn").addEventListener("click", () => {
         body: JSON.stringify({
             texto_mensagem: msg,
             nome_usuario: user,
-            nome_grupo: channel,
+            nome_grupo: channelName,
         })
     })
     .then(async response => {

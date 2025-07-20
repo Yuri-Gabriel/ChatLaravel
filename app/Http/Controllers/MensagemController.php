@@ -38,8 +38,8 @@ class MensagemController extends Controller {
                     'message' => 'Erro ao salvar a mensagem'
                 ], JsonResponse::HTTP_BAD_REQUEST);
             }
-
-            broadcast(new MensagemEvent($mensagemDto));
+            //MensagemEvent::dispatch($mensagemDto);
+            broadcast(new MensagemEvent($mensagemDto))->toOthers();
             return response()->json([
                 'success' => true,
                 'message' => 'Mensagem criada com sucesso'

@@ -1,14 +1,12 @@
 <?php
 
-use App\Events\MensagemEvent;
-use App\Models\Grupo;
-use App\Models\Usuario;
+use App\Dto\MensagemDTO;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
 
-Broadcast::channel("chat.{nomeGrupo}", function (Usuario $user, string $nomeGrupo): bool {
-    $grupo = Grupo::where('nome_grupo', $nomeGrupo)->first();
-
-    if ($grupo == null) return false;
-
-    return $user->grupos()->where('grupo.id_grupo', $grupo->id_grupo)->exists();
+Broadcast::channel("chat.{nomeGrupo}", function ($user, $nomeGrupo) {
+    Log::debug("Broadcast::channel: " . $nomeGrupo);
+    return [
+        'nomeGrupo' => $nomeGrupo
+    ];
 });
